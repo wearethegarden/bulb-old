@@ -1,0 +1,18 @@
+{
+    "name": "wearethegarden/bulb",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "The Garden",
+            "email": "team@wearethegarden.co.uk"
+        }
+    ],
+    "require": {
+        "twig/twig": "^1.34"
+    },
+    "autoload": {
+        "psr-4": {
+            "Bulb\\": "src/"
+        }
+    }
+}
