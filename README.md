@@ -34,9 +34,11 @@ try_files $uri $uri/ /app.php;
 The main app configuration sits within the file located at `{$app->path}/config/config.php`. This is where the name, version, and any other relevant configuration is set. This is also where the app is initialised. i.e. `$app = new \Bulb\App($path)`.
 
 ## Routing
-The app routes are defined within `{$app->path}/config/routes.php`. This is where you define the URL, namespace, controller, and action i.e. `$router->add('/', ['namespace' => 'namespace\Controllers', 'controller' => 'Account', 'action' => 'signup'])`.
+The app routes are defined within `{$app->path}/config/routes.php`. This is where you define the URL, method, namespace, controller, and action i.e. `$router->add('/', 'get', ['namespace' => 'namespace\Controllers', 'controller' => 'Account', 'action' => 'signup'])`.
 
 Once you have defined all the desired routes in the `{$app->path}/config/routes.php` file, you need to call the `dispatch` function. This will check that the current route is valid, and it will also initialise the relevant controller and call the action defined for that route e.g. if a user lands on `/about`, but there isn't a define route, an error page will be returned, along with a 404 HTTP status. If `/about` is defined, and the controller is set to `About`, and the action is set to `index`, then a new instance of `About` class will be created, and the `index` method will be called.
+
+You can register the same route multiple times, with different methods (i.e. `get`, `post`), and define different actions for each. This allows you to do things like `POST` to the same URL that a form exists on, but handle the `POST` request with a different action.
 
 ## View
 The views sit within the `{$app->path}/Views` folder. For small projects, pages can be stored in the top-level of this folder i.e. `{$app->path}/Views/Home.php`, `{$app->path}/Views/About.php` etc. For bigger projects, these can be separated into sub-folders i.e. `{$app->path}/Views/Account/Login.php`, `{$app->path}/Views/Admin/Settings.php` etc. Master templates can be stored in the templates folder (`{$app->path}/Views/templates`), and partials in the partials folder (`{$app->path}/Views/partials`).
