@@ -38,9 +38,14 @@
          * @param string $destination The route URL.
          * @param array $params       Route parameters (Namespace, controller, action etc.)
          */
-        public function add($destination, $params = []) {
+        public function add($destination, $method, $params = []) {
             $this->destination = $destination;
-            $this->routes->{$this->destination} = (object) $params;
+            $this->method = strtolower($method);
+
+            if(!$this->routes->{$this->destination})
+                $this->routes->{$this->destination} = (object) [];
+
+            $this->routes->{$this->destination}->{$this->method} = (object) $params;
         }
 
         /**
@@ -54,21 +59,21 @@
              * the controller and initiate it.
              */
             if(isset($this->routes->{$this->route})) {
-                $this->params = $params;
+                $this->serverMethod = strtolower($_SERVER['REQUEST_METHOD']);
 
-                $this->namespace = $this->params->namespace;
-                $this->controller = $this->params->controller;
-                $this->action = $this->params->action;
+                foreach($this->routes as $route => $methods) {
 
-                foreach($this->routes as $route => $params) {
-                    $this->params = $params;
+                    foreach($methods as $method => $params) {
+                        $this->method = $method;
+                        $this->params = $params;
 
-                    $this->controller = "\\{$this->params->namespace}\\{$this->params->controller}Controller";
-                    $this->controller = new $this->controller($this->app);
-                    $this->action = $this->params->action;
+                        $this->controller = "\\{$this->params->namespace}\\{$this->params->controller}Controller";
+                        $this->controller = new $this->controller($this->app);
+                        $this->action = $this->params->action;
 
-                    if($this->route == $route)
-                        return $this->controller->{$this->action}();
+                        if($this->route == $route && $this->serverMethod == $this->method)
+                            return $this->controller->{$this->action}();
+                    }
                 }
 
             /**
