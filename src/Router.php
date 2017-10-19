@@ -25,11 +25,15 @@
             // Grab the current route.
             $root = preg_quote($_SERVER['DOCUMENT_ROOT'], '/');
             $this->directory = parse_url(preg_replace("/^{$root}/", '', $this->app->path), PHP_URL_PATH);
-            $this->route = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+            $this->route = (object) parse_url($_SERVER['REQUEST_URI']);
+
+            // Separate the query string parameters into key => value accessible attributes.
+            parse_str($this->route->query, $this->route->query);
+            $this->route->query = (object) $this->route->query;
 
             // Remove directory from route?
-            if (!empty($this->directory) && strpos($this->route, $this->directory) === 0)
-                $this->route = substr($this->route, strlen($this->directory));
+            if (!empty($this->directory) && strpos($this->route->path, $this->directory) === 0)
+                $this->route->path = substr($this->route->path, strlen($this->directory));
         }
 
         /**
@@ -58,7 +62,7 @@
              * Check that the current route is in our routing table. If it is, construct
              * the controller and initiate it.
              */
-            if(isset($this->routes->{$this->route})) {
+            if(isset($this->routes->{$this->route->path})) {
                 $this->serverMethod = strtolower($_SERVER['REQUEST_METHOD']);
 
                 foreach($this->routes as $route => $methods) {
@@ -68,10 +72,10 @@
                         $this->params = $params;
 
                         $this->controller = "\\{$this->params->namespace}\\{$this->params->controller}Controller";
-                        $this->controller = new $this->controller($this->app);
+                        $this->controller = new $this->controller($this->app, $this->route);
                         $this->action = $this->params->action;
 
-                        if($this->route == $route && $this->serverMethod == $this->method)
+                        if($this->route->path == $route && $this->serverMethod == $this->method)
                             return $this->controller->{$this->action}();
                     }
                 }
