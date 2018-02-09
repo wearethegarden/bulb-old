@@ -22,14 +22,19 @@
             $this->cache = false;
 
             // Is cache enabled?
-            if($this->app->cache->enabled == true)
+            if($this->app->cache->enabled == true) {
 
-                // Is our cache directory writable?
-                if(!is_writable($this->app->cache->path)) {
-                    throw new \Exception("Cache directory ({$this->app->cache->path}) is not writable. Please change folder permissions to 777.");
+                // Does our cache directory exists and is it writable?
+                if(!file_exists($this->app->cache->path)) {
+                    mkdir($this->app->cache->path, 0777);
                 } else {
-                    $this->cache = $this->app->cache->path;
+                    if(!is_writable($this->app->cache->path)) {
+                        throw new \Exception("Cache directory ({$this->app->cache->path}) is not writable. Please change folder permissions to 0777.");
+                    } else {
+                        $this->cache = $this->app->cache->path;
+                    }
                 }
+            }
 
             $this->twig = new \Twig_Environment(new \Twig_Loader_Filesystem("{$this->app->path}/Views"), array('cache' => $this->cache, 'auto_reload' => true));
         }
