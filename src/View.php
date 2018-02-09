@@ -49,6 +49,6 @@
             $this->view = $view;
             $this->args = $args;
 
-            echo $this->twig->render("{$this->view}.php", $this->args);
+            echo $this->twig->render("{$this->view}.html", $this->args);
         }
     }
