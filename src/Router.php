@@ -28,8 +28,9 @@
             $this->route = (object) parse_url($_SERVER['REQUEST_URI']);
 
             // Separate the query string parameters into key => value accessible attributes.
-            parse_str($this->route->query, $this->route->query);
-            $this->route->query = (object) $this->route->query;
+            if(array_key_exists('query', $this->route))
+                parse_str($this->route->query, $this->route->query);
+                $this->route->query = (object) $this->route->query;
 
             // Remove directory from route?
             if (!empty($this->directory) && strpos($this->route->path, $this->directory) === 0)
