@@ -41,7 +41,7 @@ Once you have defined all the desired routes in the `{$app->path}/config/routes.
 You can register the same route multiple times, with different methods (i.e. `get`, `post`), and define different actions for each. This allows you to do things like `POST` to the same URL that a form exists on, but handle the `POST` request with a different action.
 
 ## View
-The views sit within the `{$app->path}/Views` folder. For small projects, pages can be stored in the top-level of this folder i.e. `{$app->path}/Views/Home.php`, `{$app->path}/Views/About.php` etc. For bigger projects, these can be separated into sub-folders i.e. `{$app->path}/Views/Account/Login.php`, `{$app->path}/Views/Admin/Settings.php` etc. Master templates can be stored in the templates folder (`{$app->path}/Views/templates`), and partials in the partials folder (`{$app->path}/Views/partials`).
+The views sit within the `{$app->path}/Views` folder. For small projects, pages can be stored in the top-level of this folder i.e. `{$app->path}/Views/Home.php`, `{$app->path}/Views/About.html` etc. For bigger projects, these can be separated into sub-folders i.e. `{$app->path}/Views/Account/Login.html`, `{$app->path}/Views/Admin/Settings.html` etc. Master templates can be stored in the templates folder (`{$app->path}/Views/templates`), and partials in the partials folder (`{$app->path}/Views/partials`).
 
 ## Controller
 Controllers are stored in the `{$app->path}/Controllers` folder, and follow the naming convention [Page Name + Controller] i.e. `AccountController`. For smaller projects that only have a handful of top-level pages, a master 'pages' controller can be used i.e. `PagesController` where the actions for all the pages reside.
